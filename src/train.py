@@ -42,14 +42,12 @@ class EvaluationCallback(BaseCallback):
             temp_agent = ProjectAgent(self.model)
             
             score_single = evaluate_HIV(agent=temp_agent, nb_episode=1)
-            
             score_population = evaluate_HIV_population(agent=temp_agent, nb_episode=5)
             
             if score_population > self.best_mean_reward and score_population > 2e+10 and score_single > 2e+10:
                 self.best_mean_reward = score_population
-                self.model.save("best_model2e10")
+                self.model.save("model")
                 print("Saved model 2e+10")
-                
             self.last_mean_reward = score_population
             
             if self.verbose > 0:
@@ -90,8 +88,8 @@ def train_dqn():
         tensorboard_log="./dqn_hiv_tensorboard/"
     )
     
-    # Setup callback
-    # Evaluate every 5 episodes (5 * 200 steps = 1000 steps)
+    
+    # do an evaluation every 5 episodes (5 * 200 steps = 1000 steps)
     callback = EvaluationCallback(eval_freq=1000)
     
     TOTAL_TIMESTEPS = 40_000
